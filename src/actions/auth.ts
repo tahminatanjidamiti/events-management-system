@@ -43,3 +43,65 @@ export const login = async (data: FieldValues) => {
   };
 };
 
+export const refreshAccessToken = async () => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_API}/auth/refresh-token`,
+    {
+      method: "POST",
+      credentials: "include",
+    }
+  );
+
+  const data = await res.json();
+
+  if (!res.ok || !data.success) {
+    throw new Error("Session expired");
+  }
+
+  return data;
+};
+
+export const forgotPassword = async (email: string) => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_API}/auth/forgot-password`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    }
+  );
+
+  const data = await res.json();
+
+  if (!res.ok || !data.success) {
+    throw new Error(data.message || "Failed to send reset email");
+  }
+
+  return data.message;
+};
+export const resetPassword = async (
+  token: string,
+  id: string,
+  password: string
+) => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_API}/auth/reset-password`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+      body: JSON.stringify({ id, password }),
+    }
+  );
+
+  const data = await res.json();
+
+  if (!res.ok || !data.success) {
+    throw new Error(data.message || "Password reset failed");
+  }
+
+  return data.message;
+};
+

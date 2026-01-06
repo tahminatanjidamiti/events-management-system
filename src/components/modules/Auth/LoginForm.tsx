@@ -109,6 +109,14 @@ export default function LoginForm() {
                       {...field}
                     />
                   </FormControl>
+                  <div className="flex justify-end">
+                    <Link
+                      href="/forgot-password"
+                      className="text-sm text-blue-600 hover:underline"
+                    >
+                      Forget password?
+                    </Link>
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}
