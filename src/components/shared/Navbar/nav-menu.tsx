@@ -26,30 +26,30 @@ const commonLinks: MenuItem[] = [
 const menuByRole: Record<Role, MenuItem[]> = {
   GUEST: [
     ...commonLinks,
-    { label: "Become a Host", href: "/behost" },
+    { label: "Become a Host", href: "/become-host" },
   ],
 
   USER: [
     ...commonLinks,
-    { label: "Become a Host", href: "/behost" },
-    { label: "My Events", href: "/myevents" },
-    { label: "Profile", href: "/profile" },
+    { label: "Become a Host", href: "/become-host" },
+    { label: "My Events", href: "/user/my-events" },
+    { label: "Profile", href: "/user/profile" },
   ],
 
   HOST: [
     ...commonLinks,
-    { label: "My Events", href: "/myevents" },
-    { label: "Create Event", href: "/createevent" },
-    { label: "Profile", href: "/profile" },
+    { label: "My Events", href: "host/my-events" },
+    { label: "Create Event", href: "host/create-event" },
+    { label: "Profile", href: "/host/profile" },
   ],
 
   ADMIN: [
     { label: "Home", href: "/" },
-    { label: "Admin Dashboard", href: "/admindashboard" },
-    { label: "Manage Users", href: "/manageusers" },
-    { label: "Manage Hosts", href: "/managehosts" },
-    { label: "Manage Events", href: "/manageevents" },
-    { label: "Profile", href: "/profile" },
+    { label: "Admin Dashboard", href: "/admin/admin-dashboard" },
+    { label: "Manage Users", href: "/admin/manage-users" },
+    { label: "Manage Hosts", href: "/admin/manage-hosts" },
+    { label: "Manage Events", href: "/admin/manage-events" },
+    { label: "Profile", href: "/admin/profile" },
   ],
 };
 

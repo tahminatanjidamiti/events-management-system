@@ -6,26 +6,20 @@ export default withAuth(
     const role = req.nextauth.token?.role as string | undefined;
     const pathname = req.nextUrl.pathname;
 
-    if (
-      pathname.startsWith("/admindashboard") ||
-      pathname.startsWith("/manage")
-    ) {
+    if ( pathname.startsWith("/admin")) {
       if (role !== "ADMIN") {
         return NextResponse.redirect(new URL("/", req.url));
       }
     }
 
-    if (pathname.startsWith("/createevent")) {
+    if (pathname.startsWith("/host")) {
       if (role !== "HOST") {
         return NextResponse.redirect(new URL("/", req.url));
       }
     }
 
-    if (
-      pathname.startsWith("/profile") ||
-      pathname.startsWith("/myevents")
-    ) {
-      if (role !== "USER" && role !== "HOST" && role !== "ADMIN") {
+    if ( pathname.startsWith("/user")) {
+      if (role !== "USER") {
         return NextResponse.redirect(new URL("/", req.url));
       }
     }
@@ -40,12 +34,8 @@ export default withAuth(
 );
 export const config = {
   matcher: [
-    "/profile/:path*",
-    "/myevents/:path*",
-    "/createevent/:path*",
-    "/admindashboard/:path*",
-    "/manageusers/:path*",
-    "/managehosts/:path*",
-    "/manageevents/:path*",
+    "/admin/:path*",
+    "/host/:path*",
+    "/user/:path*",
   ],
 };
