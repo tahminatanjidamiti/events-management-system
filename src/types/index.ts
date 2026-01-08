@@ -22,7 +22,7 @@ export type PaymentStatus =
   | "UNPAID"
   | "CANCEL";
 
-export interface CityLocation {
+export interface ILocation {
   lat: number;
   lng: number;
   formattedAddress?: string;
@@ -39,18 +39,13 @@ export interface User {
   picture?: string | null;
   bio?: string | null;
   interests: string[];
-  city?: CityLocation;
+  city?: ILocation;
   avgRating: number;
   reviewCount: number;
   createdAt: Date;
   updatedAt: Date;
 }
 
-export interface EventLocation {
-  lat: number;
-  lng: number;
-  formattedAddress?: string;
-}
 export interface IEventCreate {
   title: string;
   eventType?: string | null;
@@ -59,7 +54,7 @@ export interface IEventCreate {
   minParticipants?: number | null;
   maxParticipants?: number | null;
   image?: string | null;
-  location: EventLocation;
+  location: ILocation;
   startDate: string | Date;
   endDate: string | Date;
   joiningFee?: number;

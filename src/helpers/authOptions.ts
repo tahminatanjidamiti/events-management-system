@@ -1,7 +1,7 @@
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { NextAuthOptions } from "next-auth";
-import { CityLocation, Role, UserStatus } from "@/types";
+import { ILocation, Role, UserStatus } from "@/types";
 
 
 declare module "next-auth" {
@@ -17,7 +17,7 @@ declare module "next-auth" {
       isVerified?: boolean | null;
       bio?: string | null;
       interests: string[] | null;
-      city?: CityLocation | null;
+      city?: ILocation | null;
       avgRating: number | null;
       reviewCount: number | null;
     };
@@ -33,7 +33,7 @@ declare module "next-auth" {
     isVerified?: boolean | null;
     bio?: string | null;
     interests: string[] | null;
-    city?: CityLocation | null;
+    city?: ILocation | null;
     avgRating: number | null;
     reviewCount: number | null;
   }
@@ -130,7 +130,7 @@ export const authOptions: NextAuthOptions = {
         session.user.phone = token?.phone as string;
         session.user.isVerified = token?.isVerified as boolean;
         session.user.bio = token?.bio as string; session.user.interests = token?.interests as string[];
-        session.user.city = token?.city as CityLocation;
+        session.user.city = token?.city as ILocation;
         session.user.avgRating = token?.avgRating as number;
         session.user.reviewCount = token?.reviewCount as number;
       }
