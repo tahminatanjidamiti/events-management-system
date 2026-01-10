@@ -78,7 +78,7 @@ export default function Sidebar() {
             My Events
           </Link>
           <Link
-            href="/host/create-event"
+            href="/host/events"
             className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-yellow-200 hover:text-black"
           >
             <BookCheck className="h-4 w-4" />
@@ -141,7 +141,7 @@ export default function Sidebar() {
             Profile
           </Link>
           <Link
-            href="/user/social"
+            href="/user/user-social"
             className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-gray-100 hover:text-black"
           >
             <Group className="h-4 w-4" />

@@ -47,6 +47,7 @@ export interface User {
 }
 
 export interface IEventCreate {
+  id?: string;
   title: string;
   eventType?: string | null;
   description: string;
@@ -62,12 +63,13 @@ export interface IEventCreate {
 }
 
 export interface IHostCreate {
+  id?: string;
+  userId?: string;
   message?: string;
 }
 
 export interface IHostUpdate {
   status?: HostUpdateStatus;
-  reviewedAt?: Date;
 }
 export interface IFriendRequestPayload {
   receiverId: string;

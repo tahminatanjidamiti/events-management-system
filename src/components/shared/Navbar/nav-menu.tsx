@@ -34,12 +34,13 @@ const menuByRole: Record<Role, MenuItem[]> = {
     { label: "Become a Host", href: "/become-host" },
     { label: "My Events", href: "/user/my-events" },
     { label: "Profile", href: "/user/profile" },
+    { label: "Social", href: "/user/user-social" },
   ],
 
   HOST: [
     ...commonLinks,
     { label: "My Events", href: "/host/my-events" },
-    { label: "Create Event", href: "/host/create-event" },
+    { label: "Create Event", href: "/host/events" },
     { label: "Profile", href: "/host/profile" },
   ],
 

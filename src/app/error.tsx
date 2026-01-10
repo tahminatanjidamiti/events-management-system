@@ -29,7 +29,7 @@ export default function ErrorPage({
         )}
 
         <div className="mt-4">
-          <Button className="bg-yellow-700" onClick={() => reset()}>
+          <Button className="hover:bg-yellow-700 border-4 border-yellow-800" onClick={() => reset()}>
             Try again
           </Button>
         </div>
