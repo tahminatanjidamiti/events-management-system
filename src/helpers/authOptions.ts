@@ -1,11 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { NextAuthOptions } from "next-auth";
 import { ILocation, Role, UserStatus } from "@/types";
-
+import "next-auth/jwt";
 
 declare module "next-auth" {
   interface Session {
+    accessToken?: string;
+    refreshToken?: string;
     user: {
       id: string;
       fullName?: string | null;
@@ -39,6 +42,25 @@ declare module "next-auth" {
   }
 }
 
+declare module "next-auth/jwt" {
+  interface JWT {
+    id: string;
+    fullName?: string | null;
+    role?: Role | null;
+    picture?: string | null;
+    phone?: string | null;
+    status?: UserStatus | null;
+    isVerified?: boolean | null;
+    bio?: string | null;
+    interests: string[] | null;
+    city?: ILocation | null;
+    avgRating: number | null;
+    reviewCount: number | null;
+    accessToken?: string;
+    refreshToken?: string;
+  }
+}
+
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
@@ -47,30 +69,24 @@ export const authOptions: NextAuthOptions = {
     }),
     CredentialsProvider({
       name: "Credentials",
-
       credentials: {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
-
       async authorize(credentials) {
         if (!credentials?.email || !credentials.password) {
           throw new Error("Email or password is missing");
         }
 
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_API}/auth/login`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              email: credentials.email,
-              password: credentials.password,
-            }),
-          }
-        );
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/auth/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: credentials.email,
+            password: credentials.password,
+          }),
+          credentials: "include",
+        });
 
         if (!res.ok) {
           const errorData = await res.json();
@@ -78,7 +94,7 @@ export const authOptions: NextAuthOptions = {
         }
 
         const response = await res.json();
-        const user = response?.data?.result;
+        const { user, accessToken, refreshToken } = response.data;
 
         if (!user?.id) {
           throw new Error("Invalid credentials");
@@ -98,67 +114,71 @@ export const authOptions: NextAuthOptions = {
           city: user.city,
           avgRating: user.avgRating,
           reviewCount: user.reviewCount,
+          accessToken,
+          refreshToken,
         };
       },
     }),
   ],
   callbacks: {
+
     async jwt({ token, user }) {
       if (user) {
-        token.id = user?.id;
-        token.fullName = user?.fullName;
-        token.role = user?.role;
-        token.picture = user?.picture;
-        token.status = user?.status;
-        token.phone = user?.phone;
-        token.isVerified = user?.isVerified;
-        token.bio = user?.bio;
-        token.interests = user?.interests;
-        token.city = user?.city;
-        token.avgRating = user?.avgRating;
-        token.reviewCount = user?.reviewCount;
+        token.id = user.id;
+        token.fullName = user.fullName;
+        token.role = user.role;
+        token.picture = user.picture;
+        token.status = user.status;
+        token.phone = user.phone;
+        token.isVerified = user.isVerified;
+        token.bio = user.bio;
+        token.interests = user.interests;
+        token.city = user.city;
+        token.avgRating = user.avgRating;
+        token.reviewCount = user.reviewCount;
+        token.accessToken = (user as any).accessToken;
+        token.refreshToken = (user as any).refreshToken;
       }
       return token;
     },
+
     async session({ session, token }) {
       if (session?.user) {
-        session.user.id = token?.id as string;
-        session.user.fullName = token?.fullName as string;
-        session.user.role = token?.role as Role;
-        session.user.picture = token?.picture as string;
-        session.user.status = token?.status as UserStatus;
-        session.user.phone = token?.phone as string;
-        session.user.isVerified = token?.isVerified as boolean;
-        session.user.bio = token?.bio as string; session.user.interests = token?.interests as string[];
-        session.user.city = token?.city as ILocation;
-        session.user.avgRating = token?.avgRating as number;
-        session.user.reviewCount = token?.reviewCount as number;
+        session.user.id = token.id;
+        session.user.fullName = token.fullName ?? null;
+        session.user.role = token.role ?? null;
+        session.user.picture = token.picture ?? null;
+        session.user.status = token.status ?? null;
+        session.user.phone = token.phone ?? null;
+        session.user.isVerified = token.isVerified ?? null;
+        session.user.bio = token.bio ?? null;
+        session.user.interests = token.interests ?? null;
+        session.user.city = token.city ?? null;
+        session.user.avgRating = token.avgRating ?? null;
+        session.user.reviewCount = token.reviewCount ?? null;
       }
+      session.accessToken = token.accessToken;
+      session.refreshToken = token.refreshToken;
       return session;
     },
+
     async signIn({ user, account }) {
       if (account?.provider === "google") {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_API}/auth/google`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              fullName: user.name,
-              email: user.email,
-              picture: user.image,
-            }),
-          }
-        );
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/auth/google`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            fullName: user.name,
+            email: user.email,
+            picture: user.image,
+          }),
+          credentials: "include",
+        });
 
         const response = await res.json();
+        if (!res.ok || !response.success) return false;
 
-        if (!res.ok || !response.success) {
-          return false;
-        }
-
-        const dbUser = response.data;
-
+        const { user: dbUser, accessToken, refreshToken } = response.data;
         user.id = dbUser.id;
         user.fullName = dbUser.fullName;
         user.role = dbUser.role;
@@ -171,10 +191,13 @@ export const authOptions: NextAuthOptions = {
         user.city = dbUser.city;
         user.avgRating = dbUser.avgRating;
         user.reviewCount = dbUser.reviewCount;
+        (user as any).accessToken = accessToken;
+        (user as any).refreshToken = refreshToken;
+
       }
 
       return true;
-    }
+    },
   },
   secret: process.env.NEXTAUTH_SECRET,
   pages: {

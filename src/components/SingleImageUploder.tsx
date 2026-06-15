@@ -2,14 +2,14 @@
 import { AlertCircleIcon, ImageUpIcon, XIcon } from "lucide-react";
 import { useEffect } from "react";
 import { useFileUpload } from "./use-file-upload";
-import Image from "next/image";
+ 
 type SingleImageUploaderProps = {
   onChange: React.Dispatch<React.SetStateAction<File | null>>;
 };
 
-export default function SingleImageUploader({ onChange }: SingleImageUploaderProps)  {
+export default function SingleImageUploader({ onChange }: SingleImageUploaderProps) {
   const maxSizeMB = 5;
-  const maxSize = maxSizeMB * 1024 * 1024; // 5MB default
+  const maxSize = maxSizeMB * 1024 * 1024;
 
   const [
     { files, isDragging, errors },
@@ -41,7 +41,6 @@ export default function SingleImageUploader({ onChange }: SingleImageUploaderPro
   return (
     <div className="flex flex-col gap-2">
       <div className="relative">
-        {/* Drop area */}
         <div
           role="button"
           onClick={openFileDialog}
@@ -59,7 +58,8 @@ export default function SingleImageUploader({ onChange }: SingleImageUploaderPro
           />
           {previewUrl ? (
             <div className="absolute inset-0">
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src={previewUrl}
                 alt={files[0]?.file?.name || "Uploaded image"}
                 className="size-full object-cover"
@@ -82,6 +82,7 @@ export default function SingleImageUploader({ onChange }: SingleImageUploaderPro
             </div>
           )}
         </div>
+
         {previewUrl && (
           <div className="absolute top-4 right-4">
             <button

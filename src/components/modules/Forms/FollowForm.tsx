@@ -33,7 +33,7 @@ export default function FollowForm({
     <button
       disabled={loading}
       onClick={submit}
-      className="px-3 py-2 bg-indigo-600 text-white rounded"
+      className="text-xs px-1 py-1 hover:bg-orange-400 border-4 border-yellow-800 rounded"
     >
       Follow
     </button>

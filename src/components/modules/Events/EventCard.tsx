@@ -8,16 +8,17 @@ export default function EventCard({ event }: { event: IEventCreate }) {
       href={`/events/${event.id}`}
       className="block group transform hover:-translate-y-1 transition-transform duration-300 h-full"
     >
-      <div className="bg-linear-to-l from-gray-600 from-5% via-grey-400 to-gray-800 dark:bg-linear-to-l dark:from-gray-800 dark:from-5% dark:via-gray-950 dark:to-gray-800 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 h-full flex flex-col border border-slate-700/70">
+      <div className="bg-linear-to-l from-gray-700 from-5% via-amber-400 to-gray-700 dark:bg-linear-to-l dark:from-gray-900 dark:from-5% dark:via-gray-950 dark:to-gray-900 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 h-full flex flex-col border border-slate-700/70">
 
         {event.image ? (
-          <div className="relative h-56 w-full overflow-hidden">
+          <div className="relative h-60 w-full overflow-hidden rounded-lg shadow-lg">
             <Image
               src={event.image}
               alt={event.title}
               fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-fill group-hover:scale-105 transition-transform duration-300"
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              priority
+              className="object-cover"
             />
           </div>
         ) : (
@@ -31,18 +32,41 @@ export default function EventCard({ event }: { event: IEventCreate }) {
             {event.title}
           </h3>
 
-          <p className="mb-4 line-clamp-3 text-gray-200">
+          <p className="mb-4 line-clamp-1 text-gray-200">
             {event.description}
           </p>
 
-          <div className="flex items-center justify-between mt-auto text-sm text-gray-300">
-            <span>
-              {new Date(event.startDate).toLocaleDateString()}
-            </span>
-            <span>
-              {event.joiningFee ? `৳${event.joiningFee}` : "Free"}
-            </span>
-          </div>
+          <p>🧑‍💻 <span className="font-medium">Host:</span> {event?.host?.fullName}</p>
+          <p>📌 <span className="font-medium">Type:</span> {event.eventType ?? "General"}</p>
+
+          <p>
+            📍 <span className="font-medium">Location:</span>{" "}
+            {event.location?.formattedAddress}
+          </p>
+
+          <p>
+            📅 <span className="font-medium">Date:</span>{" "}
+            {new Date(event.startDate).toLocaleDateString()}
+          </p>
+
+          <p>
+            👥 <span className="font-medium">Participants:</span>{" "}
+            {event.minParticipants ?? 0} – {event.maxParticipants ?? "∞"}
+          </p>
+
+          <p>
+            💰 <span className="font-medium">Fee:</span>{" "}
+            {event.joiningFee && event.joiningFee > 0
+              ? `৳${event.joiningFee}`
+              : "Free"}
+          </p>
+
+          <p>
+            🧾 <span className="font-medium">Status:</span>{" "}
+            {event.status ?? "Active"}
+          </p>
+          {event?.host?.avgRating && (<p>⭐ <span className="font-medium">Host:</span> {event?.host?.avgRating}</p>)}
+          {event?.host?.reviewCount && (<p>🔄️ <span className="font-medium">Host:</span> {event?.host?.reviewCount}</p>)}
 
           <div className="text-right mt-4">
             <span className="text-amber-500 hover:underline">

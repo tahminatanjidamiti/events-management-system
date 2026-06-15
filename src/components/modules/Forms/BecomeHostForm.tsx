@@ -23,7 +23,7 @@ export default function BecomeHostForm() {
 
       toast.success("Host request submitted successfully 🎉");
       setMessage("");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.error(error.message || "Something went wrong");
     } finally {
@@ -37,9 +37,11 @@ export default function BecomeHostForm() {
       className="max-w-lg space-y-4 rounded-xl border p-6 shadow-sm"
     >
       <h2 className="text-xl font-semibold">Become a Host</h2>
-
+      <p className="text-xs mt-2">
+        Tip: Require userId, if you are not logged in first try to login as a USER!
+      </p>
       <textarea
-        className="textarea textarea-bordered w-full"
+        className="textarea border w-full p-1"
         rows={5}
         placeholder="Why do you want to become a host?"
         value={message}

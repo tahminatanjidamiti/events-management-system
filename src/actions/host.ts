@@ -1,9 +1,10 @@
 "use server";
+import { authFetch } from "@/lib/authFetch";
 import { IHostCreate, IHostUpdate } from "@/types";
 
 
 export const becomeHost = async (data?: IHostCreate) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/host`, {
+  const res = await authFetch(`${process.env.NEXT_PUBLIC_BASE_API}/host`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data || {}),
@@ -15,7 +16,18 @@ export const becomeHost = async (data?: IHostCreate) => {
 };
 
 export const updateHostStatus = async (id: string, data: IHostUpdate) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/host/${id}`, {
+  const res = await authFetch(`${process.env.NEXT_PUBLIC_BASE_API}/host/approve/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+
+  const json = await res.json();
+  if (!res.ok || !json.success) throw new Error(json.message || "Failed to approve host");
+  return json.data;
+};
+export const updateHostById = async (id: string, data: IHostCreate) => {
+  const res = await authFetch(`${process.env.NEXT_PUBLIC_BASE_API}/host/${id}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
@@ -23,5 +35,23 @@ export const updateHostStatus = async (id: string, data: IHostUpdate) => {
 
   const json = await res.json();
   if (!res.ok || !json.success) throw new Error(json.message || "Failed to update host");
+  return json.data;
+};
+
+export const getHosts = async () => {
+  const res = await authFetch(`${process.env.NEXT_PUBLIC_BASE_API}/host`, {
+    cache: "no-store",
+  });
+
+  const json = await res.json();
+  if (!res.ok || !json.success) throw new Error(json.message || "Failed to get host");
+  return json.data;;
+};
+
+export const getHostById = async (hostId: string) => {
+  const res = await authFetch(`${process.env.NEXT_PUBLIC_BASE_API}/host/${hostId}`);
+
+  const json = await res.json();
+  if (!res.ok || !json.success) throw new Error(json.message || "Failed to get host");
   return json.data;
 };

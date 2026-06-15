@@ -51,7 +51,7 @@ export interface IEventCreate {
   title: string;
   eventType?: string | null;
   description: string;
-  hostId: string;
+  host: User;
   minParticipants?: number | null;
   maxParticipants?: number | null;
   image?: string | null;
@@ -61,6 +61,22 @@ export interface IEventCreate {
   joiningFee?: number;
   status?: EventStatus;
 }
+export interface EventRow  {
+  id: string;
+  title: string;
+  eventType?: string;
+  status?: string;
+  startDate?: string;
+  endDate?: string;
+  joiningFee?: number;
+  minParticipants?: number;
+  maxParticipants?: number;
+  location?: { formattedAddress?: string };
+  participants?: { id: string }[];
+  host?: { fullName?: string; picture?: string };
+  image?: string;
+  description?: string;
+};
 
 export interface IHostCreate {
   id?: string;
@@ -89,6 +105,14 @@ export interface ISaveEventPayload {
 }
 
 export interface IReviewPayload {
+  eventId: string;
+  rating: number;
+  comment?: string;
+}
+
+export interface IReview {
+  id: string;
+  user: User;
   eventId: string;
   rating: number;
   comment?: string;

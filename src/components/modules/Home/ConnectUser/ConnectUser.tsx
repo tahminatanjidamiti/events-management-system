@@ -22,7 +22,7 @@ export default function ConnectUser() {
 
         if (!json.success) throw new Error();
 
-        const onlyUsers = json.data.filter(
+        const onlyUsers = json.data.data.filter(
           (u: User) => u.role === "USER"
         );
 
@@ -42,24 +42,25 @@ export default function ConnectUser() {
   }
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-semibold mb-6">
+    <div id="users" className="p-6 mt-16">
+      <h1 className="text-2xl font-semibold text-center">
         Connected with Users!
       </h1>
+      <p className="text-center my-4">Let&apos;s connect, make a friend and explore with each other!</p>
 
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="w-8/12 mx-auto p-1 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
         {users.map((user) => (
           <div
             key={user.id}
             className="border rounded p-4 space-y-4"
           >
-            <div className="flex items-center gap-3">
+            <div className="gap-2">
               <Image
                 src={user.picture || "/avatar.png"}
                 alt={user.fullName}
-                width={48}
-                height={48}
-                className="rounded-full"
+                width={50}
+                height={50}
+                className="rounded-full object-cover ring-2 ring-yellow-500/30 w-12.5! h-12.5!"
               />
               <div>
                 <p className="font-medium">{user.fullName}</p>
@@ -69,16 +70,15 @@ export default function ConnectUser() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-2">
+            <div className="flex gap-1">
               <Link
-                href={`/home/details/${user.id}`}
-                className="px-3 py-2 bg-gray-200 rounded text-center"
+                href={`/${user.id}`}
+                className="text-xs px-1 py-1 border-4 border-amber-700 rounded flex justify-center items-center hover:bg-amber-400"
               >
-                Details
+                View
               </Link>
 
               <SendRequestForm receiverId={user.id} />
-
               <FollowForm followingId={user.id} />
             </div>
           </div>

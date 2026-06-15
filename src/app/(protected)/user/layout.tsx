@@ -6,9 +6,11 @@ export default function UserLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="min-h-dvh flex gap-4">
+    <main className="min-h-dvh flex gap-1 md:gap-4">
       <Sidebar />
-      {children}
+      <div className="flex-1 min-w-0">
+        {children}
+      </div>
     </main>
   );
 }

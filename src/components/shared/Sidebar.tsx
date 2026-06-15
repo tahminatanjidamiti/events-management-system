@@ -11,10 +11,10 @@ export default function Sidebar() {
   const isHost = session?.user?.role === "HOST"
   const isUser = session?.user?.role === "USER"
   return (
-    <aside className="flex h-screen w-64 flex-col border-r">
+    <aside className="flex h-screen w-42 md:w-64 flex-col border-r">
 
       {isAdmin && (
-        <nav className="flex-1 space-y-2 p-4">
+        <nav className="flex-1 space-y-2 p-1 md:p-4">
           <Link
             href="/"
             className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-yellow-200 hover:text-black"
@@ -25,35 +25,35 @@ export default function Sidebar() {
 
           <Link
             href="/admin/admin-dashboard"
-            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-gray-100 hover:text-black"
+            className="flex items-center gap-2 rounded-lg p-1 md:px-3 md:py-2 text-sm font-medium hover:bg-gray-100 hover:text-black"
           >
             <ChartBar className="h-4 w-4" />
             Admin Dashboard
           </Link>
           <Link
             href="/admin/manage-users"
-            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-yellow-200 hover:text-black"
+            className="flex items-center gap-2 rounded-lg p-1 md:px-3 md:py-2 text-sm font-medium hover:bg-yellow-200 hover:text-black"
           >
             <Users className="h-4 w-4" />
             Manage Users
           </Link>
           <Link
             href="/admin/manage-hosts"
-            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-gray-100 hover:text-black"
+            className="flex items-center gap-2 rounded-lg p-1 md:px-3 md:py-2 text-sm font-medium hover:bg-gray-100 hover:text-black"
           >
             <BookCheck className="h-4 w-4" />
             Manage Hosts
           </Link>
           <Link
             href="/admin/manage-events"
-            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-yellow-200 hover:text-black"
+            className="flex items-center gap-2 rounded-lg p-1 md:px-3 md:py-2 text-sm font-medium hover:bg-yellow-200 hover:text-black"
           >
             <ProjectorIcon className="h-4 w-4" />
             Manage Events
           </Link>
           <Link
             href="/admin/profile"
-            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-gray-100 hover:text-black"
+            className="flex items-center gap-2 rounded-lg p-1 md:px-3 md:py-2 text-sm font-medium hover:bg-gray-100 hover:text-black"
           >
             <User className="h-4 w-4" />
             Profile
@@ -61,10 +61,10 @@ export default function Sidebar() {
         </nav>
       )}
       {isHost && (
-        <nav className="flex-1 space-y-2 p-4">
+        <nav className="flex-1 space-y-2 p-1 md:p-4">
           <Link
             href="/"
-            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-yellow-200 hover:text-black"
+            className="flex items-center gap-2 rounded-lg p-1 md:px-3 md:py-2 text-sm font-medium hover:bg-yellow-200 hover:text-black"
           >
             <Home className="h-4 w-4" />
             Home
@@ -72,21 +72,21 @@ export default function Sidebar() {
 
           <Link
             href="/host/my-events"
-            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-gray-100 hover:text-black"
+            className="flex items-center gap-2 rounded-lg p-1 md:px-3 md:py-2 text-sm font-medium hover:bg-gray-100 hover:text-black"
           >
             <ProjectorIcon className="h-4 w-4" />
             My Events
           </Link>
           <Link
             href="/host/events"
-            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-yellow-200 hover:text-black"
+            className="flex items-center gap-2 rounded-lg p-1 md:px-3 md:py-2 text-sm font-medium hover:bg-yellow-200 hover:text-black"
           >
             <BookCheck className="h-4 w-4" />
-            Create Event
+            Manage Events
           </Link>
           <Link
             href="/host/host-analytics"
-            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-gray-100 hover:text-black"
+            className="flex items-center gap-2 rounded-lg p-1 md:px-3 md:py-2 text-sm font-medium hover:bg-gray-100 hover:text-black"
           >
             <ChartBar className="h-4 w-4" />
             Host Analytics
@@ -94,7 +94,7 @@ export default function Sidebar() {
 
           <Link
             href="/host/profile"
-            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-yellow-200 hover:text-black"
+            className="flex items-center gap-2 rounded-lg p-1 md:px-3 md:py-2 text-sm font-medium hover:bg-yellow-200 hover:text-black"
           >
             <User className="h-4 w-4" />
             Profile
@@ -102,10 +102,10 @@ export default function Sidebar() {
         </nav>
       )}
       {isUser && (
-        <nav className="flex-1 space-y-2 p-4">
+        <nav className="flex-1 space-y-2 p-1 md:p-4">
           <Link
             href="/"
-            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-yellow-200 hover:text-black"
+            className="flex items-center gap-2 rounded-lg p-1 md:px-3 md:py-2 text-sm font-medium hover:bg-yellow-200 hover:text-black"
           >
             <Home className="h-4 w-4" />
             Home
@@ -113,21 +113,21 @@ export default function Sidebar() {
 
           <Link
             href="/become-host"
-            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-gray-100 hover:text-black"
+            className="flex items-center gap-2 rounded-lg p-1 md:px-3 md:py-2 text-sm font-medium hover:bg-gray-100 hover:text-black"
           >
             <User className="h-4 w-4" />
             Become a Host
           </Link>
           <Link
             href="/user/my-events"
-            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-yellow-200 hover:text-black"
+            className="flex items-center gap-2 rounded-lg p-1 md:px-3 md:py-2 text-sm font-medium hover:bg-yellow-200 hover:text-black"
           >
             <ProjectorIcon className="h-4 w-4" />
             My Events
           </Link>
           <Link
             href="/user/user-analytics"
-            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-gray-100 hover:text-black"
+            className="flex items-center gap-2 rounded-lg p-1 md:px-3 md:py-2 text-sm font-medium hover:bg-gray-100 hover:text-black"
           >
             <ChartBar className="h-4 w-4" />
             User Analytics
@@ -135,14 +135,14 @@ export default function Sidebar() {
 
           <Link
             href="/user/profile"
-            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-yellow-200 hover:text-black"
+            className="flex items-center gap-2 rounded-lg p-1 md:px-3 md:py-2 text-sm font-medium hover:bg-yellow-200 hover:text-black"
           >
             <User className="h-4 w-4" />
             Profile
           </Link>
           <Link
             href="/user/user-social"
-            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-gray-100 hover:text-black"
+            className="flex items-center gap-2 rounded-lg p-1 md:px-3 md:py-2 text-sm font-medium hover:bg-gray-100 hover:text-black"
           >
             <Group className="h-4 w-4" />
             Social

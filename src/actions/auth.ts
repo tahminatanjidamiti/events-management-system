@@ -8,6 +8,7 @@ export const register = async (data: FieldValues) => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/user/register`, {
     method: "POST",
     body: formData,
+    credentials: "include",
   });
   const responseData = await res.json();
 
@@ -29,6 +30,7 @@ export const login = async (data: FieldValues) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(data),
+    credentials: "include",
   });
   const responseData = await res.json();
 
@@ -48,7 +50,8 @@ export const refreshAccessToken = async () => {
     `${process.env.NEXT_PUBLIC_BASE_API}/auth/refresh-token`,
     {
       method: "POST",
-    }
+      credentials: "include",
+    },
   );
 
   const data = await res.json();
@@ -89,7 +92,7 @@ export const resetPassword = async (
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: token,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ id, password }),
     }
@@ -103,4 +106,3 @@ export const resetPassword = async (
 
   return data.message;
 };
-

@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { User, Role, UserStatus, ILocation } from "@/types";
 import SingleImageUploader from "@/components/SingleImageUploder";
 import Image from "next/image";
+
 const MapSelector = dynamic(() => import("@/components/ui/MapSelector"), {
   ssr: false,
 });
@@ -53,17 +54,12 @@ export default function UserForm({ user, onSubmit }: UserFormProps) {
     });
 
     setLocation(
-      user.city ?? {
-        lat: 24.8949,
-        lng: 91.8687,
-        formattedAddress: "Sylhet, Bangladesh",
-      }
+      user.city ?? { lat: 24.8949, lng: 91.8687, formattedAddress: "Sylhet, Bangladesh" }
     );
 
     setImagePreview(user.picture ?? "");
   }, [user]);
 
-  // ---------- Handlers ----------
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -82,30 +78,60 @@ export default function UserForm({ user, onSubmit }: UserFormProps) {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const formData = new FormData();
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   const formData = new FormData();
 
-    formData.append("fullName", form.fullName);
-    formData.append("email", form.email);
-    formData.append("phone", form.phone);
-    if (form.password) formData.append("password", form.password);
-    formData.append("bio", form.bio);
-    formData.append(
-      "interests",
-      form.interests.split(",").map((i) => i.trim()).join(",")
-    );
-    formData.append("role", form.role);
-    formData.append("status", form.status);
-    formData.append("isVerified", String(form.isVerified));
-    formData.append("city", JSON.stringify(location));
+  //   formData.append("fullName", form.fullName);
+  //   formData.append("email", form.email);
+  //   formData.append("phone", form.phone);
+  //   if (form.password) formData.append("password", form.password);
+  //   formData.append("bio", form.bio);
+  //   formData.append("role", form.role);
+  //   formData.append("status", form.status);
+  //   formData.append("isVerified", String(form.isVerified));
+  //   formData.append("city", JSON.stringify(location));
+  //   formData.append(
+  //     "interests",
+  //     JSON.stringify(
+  //       form.interests.split(",").map((i) => i.trim()).filter(Boolean)
+  //     )
+  //   );
 
-    if (imageFile) {
-      formData.append("picture", imageFile);
-    }
+  //   if (imageFile) formData.append("file", imageFile);
 
-    await onSubmit(formData);
-  };
+  //   await onSubmit(formData);
+  // };
+
+  // Is the preview a blob URL (newly selected file) or a remote URL (from server)?
+ 
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  const formData = new FormData();
+
+  // ✅ All typed data as one JSON blob
+  formData.append(
+    "data",
+    JSON.stringify({
+      fullName: form.fullName,
+      email: form.email,
+      phone: form.phone,
+      ...(form.password && { password: form.password }),
+      bio: form.bio,
+      role: form.role,
+      status: form.status,
+      isVerified: form.isVerified,                                        // boolean ✓
+      city: location,                                                      // object ✓
+      interests: form.interests.split(",").map((i) => i.trim()).filter(Boolean), // array ✓
+    })
+  );
+
+  // ✅ File stays separate (multipart needs it as blob)
+  if (imageFile) formData.append("file", imageFile);
+
+  await onSubmit(formData);
+};
+  const isBlobPreview = imagePreview.startsWith("blob:");
 
   return (
     <form
@@ -181,13 +207,22 @@ export default function UserForm({ user, onSubmit }: UserFormProps) {
       <div>
         <label className="block text-sm font-medium">Profile Picture</label>
         {imagePreview && (
-          <Image
-            width={100}
-            height={100}
-            src={imagePreview}
-            alt="Profile Preview"
-            className="w-24 h-24 rounded-full object-cover mb-2 border"
-          />
+          isBlobPreview ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={imagePreview}
+              alt="Profile Preview"
+              className="w-24 h-24 rounded-full object-cover mb-2 border" 
+            />
+          ) : (
+            <Image
+              width={96}
+              height={96}
+              src={imagePreview}
+              alt="Profile Preview"
+              className="w-24 h-24 rounded-full object-cover mb-2 border"
+            />
+          )
         )}
         <SingleImageUploader
           onChange={(file) => {
@@ -213,6 +248,7 @@ export default function UserForm({ user, onSubmit }: UserFormProps) {
             }
             className="border rounded px-3 py-2"
             placeholder="Latitude"
+            step="any"
           />
           <input
             type="number"
@@ -222,6 +258,7 @@ export default function UserForm({ user, onSubmit }: UserFormProps) {
             }
             className="border rounded px-3 py-2"
             placeholder="Longitude"
+            step="any"
           />
         </div>
 

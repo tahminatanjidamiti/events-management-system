@@ -3,12 +3,12 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { getHostById } from "@/services/HostServices";
-import { IEventCreate, IHostCreate } from "@/types";
+import { IEventCreate } from "@/types";
 import { toast } from "sonner";
 import { updateEvent } from "@/actions/event";
 import EventForm from "@/components/modules/Forms/EventForm";
 import { getEventById } from "@/services/EventServices";
+import Skeleton from "@/components/ui/Skeleton";
 
 export default function EditEventPage() {
   const params = useParams();
@@ -16,8 +16,8 @@ export default function EditEventPage() {
   const id = params?.id as string;
 
   const [event, setEvent] = useState<IEventCreate | null>(null);
-  const [hosts, setHosts] = useState<IHostCreate[]>([]);
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -25,11 +25,10 @@ export default function EditEventPage() {
     const fetchData = async () => {
       try {
         const eventRes = await getEventById(id);
-        const eventData = eventRes.data as IEventCreate;
+        const eventData = eventRes as IEventCreate;
 
+        if (!eventData) throw new Error("No event data returned");
         setEvent(eventData);
-        const host = await getHostById(eventData.hostId);
-        setHosts([host]); 
       } catch (error: any) {
         toast.error(error.message || "Failed to load event");
       } finally {
@@ -43,30 +42,34 @@ export default function EditEventPage() {
   const handleUpdateEvent = async (formData: FormData) => {
     try {
       if (!id) return;
-
-      const data = JSON.parse(formData.get("data") as string);
-      const file = formData.get("file") as File | null;
-
-      await updateEvent(id, data, file || undefined);
-
+      setSubmitting(true);
+      await updateEvent(id, formData);
       toast.success("Event updated successfully!");
-      router.push("/events");
+      router.push("/host/events");
     } catch (error: any) {
       toast.error(error.message || "Failed to update event");
+    } finally {
+      setSubmitting(false);
     }
   };
 
-  if (loading) return <p className="text-center mt-10">Loading event...</p>;
+  if (loading) return
+  <div className="w-8/12 mx-auto mt-10 space-y-4">
+    <Skeleton className="h-10 w-full" />
+    <Skeleton className="h-4 w-full" />
+    <Skeleton className="h-4 w-full" />
+    <Skeleton className="h-4 w-full" />
+    <Skeleton className="h-4 w-full" />
+  </div>;
   if (!event) return <p className="text-center mt-10">Event not found</p>;
 
   return (
-    <div className="container mx-auto p-6 max-w-3xl">
+    <div className="container mx-auto p-1 md:p-6 max-w-4xl">
       <h1 className="text-2xl font-semibold mb-4">Edit Event</h1>
-
       <EventForm
         event={event}
-        hosts={hosts}
         onSubmit={handleUpdateEvent}
+        submitting={submitting}
       />
     </div>
   );

@@ -1,3 +1,4 @@
+
 import { IEventCreate } from "@/types";
 
 
@@ -19,24 +20,9 @@ export const getAllEvents = async (
   return { events: data as IEventCreate[], meta };
 };
 
-export const getEventById = async (eventId: string) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/event/${eventId}`);
 
-  return res.json();
-};
-
-export const getMyEvents = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/event/me`, {
-    cache: "no-store",
-  });
-
-  return res.json();
-};
-
-export const deleteEvent = async (eventId: string) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/event/${eventId}`, {
-    method: "DELETE",
-  });
-
-  return res.json();
+export const getEventById = async (id: string) => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/event/${id}`);
+  const json = await res.json();
+  return json.data;
 };

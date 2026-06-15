@@ -33,9 +33,9 @@ export default function SendRequestForm({
     <button
       disabled={loading}
       onClick={submit}
-      className="px-3 py-2 bg-blue-600 text-white rounded"
+      className="text-xs px-1 py-1 hover:bg-green-400 border-4 border-green-800 rounded"
     >
-      Send Friend Request
+      Add Friend
     </button>
   );
 }

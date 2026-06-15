@@ -13,24 +13,18 @@ export const getAllUsers = async (
     ...options,
   });
 
-  const { data, meta } = await res.json();
-  return { users: data as User[], meta };
+  const json = await res.json();
+
+  return {
+    users: json.data.data as User[],
+    meta: json.data.meta,
+  };
 };
 
 
 export const getUserById = async (userId: string) => {
-  const url = `${process.env.NEXT_PUBLIC_BASE_API}/user/${userId}`;
-  console.log("FETCHING URL 👉", url);
 
-  const res = await fetch(url);
-
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/user/${userId}`);
   return res.json();
 };
 
-export const deleteUser = async (userId: string) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/user/${userId}`, {
-    method: "DELETE",
-  });
-
-  return res.json();
-};

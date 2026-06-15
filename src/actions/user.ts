@@ -1,26 +1,31 @@
 "use server";
-
-import { toast } from "sonner";
+import { authFetch } from "@/lib/authFetch";
 
 export async function updateProfile(id: string, formData: FormData) {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/user/${id}`, {
-      method: "PATCH",
-      body: formData,
-    });
+    const res = await authFetch(
+      `${process.env.NEXT_PUBLIC_BASE_API}/user/${id}`,
+      {
+        method: "PATCH",
+        body: formData,
+      }
+    );
 
-    if (!res.ok) {
-      const errorData = await res.json();
-      console.error("❌ Update failed:", errorData);
-      throw new Error(errorData.message || "Failed to update user");
-    }
+    const json = await res.json();
 
-    const updatedUser = await res.json();
-    return updatedUser;
+    return json.data;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error("❌ Server action error:", error);
-    toast.error(error.message || "Failed to update user");
     throw error;
   }
 }
+
+
+export const deleteUser = async (userId: string) => {
+  const res = await authFetch(`${process.env.NEXT_PUBLIC_BASE_API}/user/${userId}`, {
+    method: "DELETE",
+  });
+
+  return res.json();
+};

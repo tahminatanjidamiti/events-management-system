@@ -15,16 +15,17 @@ import {
 } from "recharts";
 
 import Skeleton from "@/components/ui/Skeleton";
-import { getDashboardMetadata } from "@/services/AnalyticsServices";
-
+import { getDashboardMetadata } from "@/actions/analytics";
 
 const COLORS = ["#D97706", "#6B7280", "#16A34A", "#2563EB"];
 
+type AnalyticsData = {
+  barData: { label: string; value: number }[];
+  pieData: { label: string; value: number }[];
+};
+
 export default function UserAnalyticsPage() {
-  const [data, setData] = useState<{
-    barData: { label: string; value: number }[];
-    pieData: { label: string; value: number }[];
-  }>({
+  const [data, setData] = useState<AnalyticsData>({
     barData: [],
     pieData: [],
   });
@@ -34,7 +35,12 @@ export default function UserAnalyticsPage() {
 
   useEffect(() => {
     getDashboardMetadata()
-      .then(setData)
+      .then((res) => {
+        setData({
+          barData: Array.isArray(res?.barData) ? res.barData : [],
+          pieData: Array.isArray(res?.pieData) ? res.pieData : [],
+        });
+      })
       .catch((err) => {
         console.error(err);
         setError("Failed to load analytics data");
@@ -42,52 +48,67 @@ export default function UserAnalyticsPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <Skeleton className="h-96 w-full m-4" />;
+  if (loading) return <div className="w-11/12 mx-auto mt-6"><Skeleton className="h-96 w-full m-4" /></div>;
 
-  if (error)
+  if (error) {
     return (
-      <p className="text-center text-red-500 font-medium mt-10">
-        {error}
-      </p>
+      <p className="text-center text-red-500 font-medium mt-10">{error}</p>
     );
+  }
 
-  if (!data.barData.length && !data.pieData.length)
+  const isEmpty =
+    data.barData.every((d) => d.value === 0) &&
+    data.pieData.every((d) => d.value === 0);
+
+  if (isEmpty) {
     return (
       <p className="text-center text-gray-500 mt-10">
-        No analytics data available
+        No activity yet. Join some events to see your analytics!
       </p>
     );
+  }
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-10">
+    <div className="p-1 lg:p-4 w-full mx-auto space-y-10">
       <h1 className="text-2xl font-bold">User Analytics</h1>
-
-      {/* BAR CHART */}
       {data.barData.length > 0 && (
-        <div className="h-72 w-full bg-white rounded shadow p-4">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data.barData}>
-              <XAxis dataKey="label" />
-              <YAxis />
+        <div className="w-full rounded shadow p-4">
+          <h2 className="text-base font-semibold mb-3 text-gray-700">Activity Overview</h2>
+          <ResponsiveContainer width="100%" height={320}>
+            <BarChart
+              data={data.barData}
+              margin={{ top: 10, right: 20, left: 0, bottom: 60 }}
+            >
+              <XAxis
+                dataKey="label"
+                angle={-35}
+                textAnchor="end"
+                interval={0}
+                tick={{ fontSize: 12 }}
+              />
+              <YAxis allowDecimals={false} />
               <Tooltip />
-              <Legend />
-              <Bar dataKey="value" />
+              <Legend verticalAlign="top" />
+              <Bar dataKey="value" fill="#E98C00" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
       )}
 
-      {/* PIE CHART */}
       {data.pieData.length > 0 && (
-        <div className="h-72 w-full bg-white rounded shadow p-4">
-          <ResponsiveContainer width="100%" height="100%">
+        <div className="w-full rounded shadow p-1">
+          <h2 className="text-base font-semibold mb-3 text-gray-700">Distribution</h2>
+          <ResponsiveContainer width="100%" height={320}>
             <PieChart>
               <Pie
                 data={data.pieData}
                 dataKey="value"
                 nameKey="label"
-                outerRadius={90}
-                label
+                outerRadius={110}
+                label={({ name, percent }: { name?: string; percent?: number }) =>
+                  `${name ?? ""} ${((percent ?? 0) * 100).toFixed(0)}%`
+                }
+                labelLine={true}
               >
                 {data.pieData.map((_, index) => (
                   <Cell
@@ -96,7 +117,7 @@ export default function UserAnalyticsPage() {
                   />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip formatter={(value: number | undefined) => [value ?? 0, "Count"] as [number, string]} />
               <Legend />
             </PieChart>
           </ResponsiveContainer>

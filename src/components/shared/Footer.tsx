@@ -26,23 +26,26 @@ export default function Footer() {
             Useful Links
           </h2>
             <div className="flex justify-start items-center gap-4 mt-2">
-              <Link href="/events" className="hover:text-yellow-600 transition-colors">
-                Explore Events
+              <Link href="/#reviews" className="hover:text-yellow-600 transition-colors">
+                Reviews
               </Link>
-              <Link href="/events" className="hover:text-yellow-600 transition-colors">
-                Events
+              <Link href="/#users" className="hover:text-yellow-600 transition-colors">
+                Users
               </Link>
-              <Link href="/events" className="hover:text-yellow-600 transition-colors">
-                Events
+              <Link href="/#faq" className="hover:text-yellow-600 transition-colors">
+                FAQ
               </Link>
-              <Link href="/events" className="hover:text-yellow-600 transition-colors">
-                Events
+              <Link href="/#about" className="hover:text-yellow-600 transition-colors">
+                About Us!
+              </Link>
+              <Link href="/#ai" className="hover:text-yellow-600 transition-colors">
+                Ai Help!
               </Link>
             </div></div>
           <div>
             <h2 className="text-xl font-semibold mb-1">
-            Connected With Us!
-          </h2>
+              Connected With Us!
+            </h2>
             <div className="flex justify-start items-center gap-6 text-sm mt-2">
               <Link href="https://www.linkedin.com/in" target="_blank" className="p-2 rounded-full bg-yellow-600 hover:bg-yellow-700 border-2 border-amber-500 transition">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-linkedin-icon lucide-linkedin"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /><rect width="4" height="12" x="2" y="9" /><circle cx="4" cy="4" r="2" /></svg>
