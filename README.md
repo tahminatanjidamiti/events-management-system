@@ -1,36 +1,143 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ✨ What is EventsVibe?
+ 
+**EventsVibe** is a full-stack events platform where users can discover local events, connect with friends, become a host, and get AI-powered event suggestions — all in one place. Built with the latest React 19, Next.js 16, and a modern UI stack.
+ 
+# 🌐 Live Link
+[https://events-management-system-flame.vercel.app/](https://events-management-system-flame.vercel.app/)
 
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+ 
+## 🚀 Key Features
+ 
+| Feature | Description |
+|---|---|
+| 🔐 **Auth System** | Login, Register, Forgot/Reset Password via NextAuth |
+| 🤖 **AI Suggestions** | Personalized event recommendations based on user interests |
+| 🗺️ **Map Integration** | Interactive maps with Leaflet + Geocoder for event locations |
+| 💳 **Payments** | Stripe-powered checkout for event tickets |
+| 👥 **Social System** | Follow users, send friend requests, save events |
+| ⭐ **Reviews** | Rate and review events you've attended |
+| 🔔 **Notifications** | Real-time notification system |
+| 📊 **Analytics** | User and host dashboards with Recharts |
+| 🌙 **Dark Mode** | Full theme switching via next-themes |
+| 🧑‍💼 **Role-Based Access** | User / Host / Admin roles with protected routes |
+ 
+---
+ 
+## 🛠️ Tech Stack
+ 
+### Core
 ```
+Next.js 16 (App Router + Turbopack)   →  Framework
+React 19                               →  UI Library
+TypeScript 5                           →  Type Safety
+Tailwind CSS 4                         →  Styling
+```
+ 
+### UI & Components
+```
+Radix UI          →  Accessible headless components (Dialog, Dropdown, Label, Nav)
+Lucide React      →  Icon library
+Sonner            →  Toast notifications
+SweetAlert2       →  Beautiful alert dialogs
+next-themes       →  Dark/light mode
+tw-animate-css    →  Tailwind animations
+clsx + tailwind-merge  →  Conditional class utilities
+class-variance-authority  →  Component variant management
+```
+ 
+### Maps
+```
+Leaflet 1.9.4              →  Interactive map rendering
+React-Leaflet 5            →  React bindings for Leaflet
+Leaflet-Control-Geocoder   →  Address search on maps
+Leaflet-GeoSearch          →  Location search integration
+```
+ 
+### Forms & Validation
+```
+React Hook Form 7   →  Performant form handling
+Zod 4               →  Schema-based validation
+@hookform/resolvers →  Zod + RHF bridge
+```
+ 
+### Data & Auth
+```
+NextAuth 4      →  Authentication (Credentials + Google OAuth)
+Recharts        →  Charts and analytics dashboards
+React Fast Marquee  →  Scrolling announcement banners
+```
+ 
+---
+ 
+## 📁 Project Structure
+ 
+```
+events-management-system/
+├── 📁 public/                      # Static assets (images, icons)
+├── 📁 src/
+│   ├── 📁 app/                     # Next.js App Router
+│   │   ├── 📁 (protected)/         # Auth-guarded routes
+│   │   │   ├── 📁 admin/           # Admin dashboard, users, events, hosts
+│   │   │   ├── 📁 host/            # Host profile, events, analytics
+│   │   │   └── 📁 user/            # User profile, my-events, social, analytics
+│   │   ├── 📁 (public)/            # Public-facing pages
+│   │   ├── 📁 api/auth/            # NextAuth API route
+│   │   ├── 📁 events/[eventId]/    # Dynamic event detail pages
+│   │   ├── 📁 payment-cancel/      # Stripe cancel redirect
+│   │   ├── 📁 payment-success/     # Stripe success redirect
+│   │   ├── 📁 login/               # Login page
+│   │   ├── 📁 register/            # Register page
+│   │   ├── 📁 forgot-password/     # Forgot password
+│   │   ├── 📁 reset-password/      # Reset password
+│   │   ├── 📁 become-host/         # Host application page
+│   │   └── layout.tsx              # Root layout
+│   │
+│   ├── 📁 components/
+│   │   ├── 📁 modules/             # Feature-based components
+│   │   │   ├── 📁 Auth/            # Login, Register, ForgotPassword forms
+│   │   │   ├── 📁 Events/          # EventCard, EventDetails, EventForm
+│   │   │   ├── 📁 Forms/           # Reusable form components
+│   │   │   └── 📁 Home/            # Hero, FAQ, Featured, Promotions, AI Suggestions
+│   │   ├── 📁 shared/              # Navbar, Footer
+│   │   └── 📁 ui/                  # Shadcn-style base components
+│   │
+│   ├── 📁 helpers/                 # authOptions, authFetch, etc.
+│   ├── 📁 lib/                     # Utility functions (utils.ts)
+│   ├── 📁 providers/               # AuthProvider, ThemeProvider
+│   ├── 📁 services/                # API service layers (Events, Social, Users)
+│   ├── 📁 types/                   # TypeScript interfaces & types
+│   ├── declarations.d.ts           # CSS module declarations
+│   ├── globals.css                 # Global styles
+│   └── proxy.ts                    # API proxy config
+│
+├── .env.production                 # Production environment variables
+├── next.config.ts                  # Next.js configuration
+├── tsconfig.json                   # TypeScript config
+├── tailwind.config                 # Tailwind config
+└── package.json
+```
+ 
+---
+ 
+## ⚙️ Getting Started
+ 
+Follow these steps to run the project locally:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 1. Clone the Repository
+git clone https://github.com/tahminatanjidamiti/events-management-system.git
+cd events-management-system
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 2. Install Dependencies
+npm install
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 3. Configure Environment Variables
+Create a `.env.local` file in the root and Configure Environment Variables
 
-## Learn More
+### 4. Run the Application
+npm run dev
 
-To learn more about Next.js, take a look at the following resources:
+## ✅ Status
+Project is functional and under active development.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+⭐ **Star this repo if you find it helpful!**
