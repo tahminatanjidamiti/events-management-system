@@ -7,7 +7,7 @@ import Image from "next/image";
 import { EventRow } from "@/types";
 
 const statusStyle: Record<string, string> = {
-  UPCOMING:  "bg-green-500/20 text-green-300 border-green-500/30",
+  OPEN:  "bg-green-500/20 text-green-300 border-green-500/30",
   ONGOING:   "bg-blue-500/20 text-blue-300 border-blue-500/30",
   FULL:      "bg-red-500/20 text-red-300 border-red-500/30",
   COMPLETED: "bg-amber-500/20 text-amber-300 border-amber-500",

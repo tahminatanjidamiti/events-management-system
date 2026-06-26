@@ -2,7 +2,7 @@
 "use client";
 import Image from "next/image";
 import { IEventCreate } from "@/types";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { joinEvent } from "@/actions/event";
 import { createPaymentSession } from "@/actions/payment";
@@ -12,15 +12,17 @@ import {
   XCircle, AlertCircle, Zap, CircleDot, Crown,
   MessageSquare, ArrowLeft,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+
+export const dynamic = "force-dynamic";
 
 const STATUS_CONFIG: Record<string, { label: string; badge: string; icon: React.ReactNode }> = {
-  UPCOMING:  { label: "Upcoming",  badge: "bg-cyan-500/20 text-cyan-300 border border-cyan-500",     icon: <Clock className="w-3.5 h-3.5" /> },
-  ONGOING:   { label: "Ongoing",   badge: "bg-emerald-500 text-emerald-300 border border-emerald-500", icon: <Zap className="w-3.5 h-3.5" /> },
-  COMPLETED: { label: "Completed", badge: "bg-amber-500 text-black border border-amber-500",     icon: <CheckCircle2 className="w-3.5 h-3.5" /> },
-  CANCELLED: { label: "Cancelled", badge: "bg-red-500 text-red-300 border border-red-500",        icon: <XCircle className="w-3.5 h-3.5" /> },
-  FULL:      { label: "Full",      badge: "bg-orange-500 text-black border border-orange-500", icon: <AlertCircle className="w-3.5 h-3.5" /> },
-  OPEN:      { label: "Open",      badge: "bg-violet-400 text-black border border-violet-500", icon: <CircleDot className="w-3.5 h-3.5" /> },
+  UPCOMING: { label: "Upcoming", badge: "bg-cyan-500/20 text-cyan-300 border border-cyan-500", icon: <Clock className="w-3.5 h-3.5" /> },
+  ONGOING: { label: "Ongoing", badge: "bg-emerald-500 text-emerald-300 border border-emerald-500", icon: <Zap className="w-3.5 h-3.5" /> },
+  COMPLETED: { label: "Completed", badge: "bg-amber-500 text-black border border-amber-500", icon: <CheckCircle2 className="w-3.5 h-3.5" /> },
+  CANCELLED: { label: "Cancelled", badge: "bg-red-500 text-red-300 border border-red-500", icon: <XCircle className="w-3.5 h-3.5" /> },
+  FULL: { label: "Full", badge: "bg-orange-500 text-black border border-orange-500", icon: <AlertCircle className="w-3.5 h-3.5" /> },
+  OPEN: { label: "Open", badge: "bg-violet-400 text-black border border-violet-500", icon: <CircleDot className="w-3.5 h-3.5" /> },
 };
 
 const fmt = (d?: string | Date) =>
@@ -43,6 +45,13 @@ const StatCard = ({
 export default function EventDetailsCard({ event }: { event: IEventCreate & { [key: string]: any } }) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get("status") === "success") {
+      router.refresh();
+    }
+  }, [searchParams, router]);
 
   const handleJoin = async () => {
     setLoading(true);
@@ -50,6 +59,7 @@ export default function EventDetailsCard({ event }: { event: IEventCreate & { [k
       if (!event.joiningFee || event.joiningFee <= 0) {
         await joinEvent(event.id!);
         toast.success("You have successfully joined the event!");
+        router.refresh();
       } else {
         const session = await createPaymentSession(event.id!);
         if (session?.url) {
@@ -75,8 +85,8 @@ export default function EventDetailsCard({ event }: { event: IEventCreate & { [k
     ? (event.reviews.reduce((s: number, r: any) => s + (r.rating ?? 0), 0) / event.reviews.length).toFixed(1)
     : null;
   const totalRevenue = event.payments
-  ?.filter((p: any) => p.status === "PAID")
-  .reduce((s: number, p: any) => s + (p.amount ?? 0), 0) ?? 0;
+    ?.filter((p: any) => p.status === "PAID")
+    .reduce((s: number, p: any) => s + (p.amount ?? 0), 0) ?? 0;
 
   const isFull = event.status === "FULL" || event.status === "CANCELLED" || event.status === "COMPLETED";
 
@@ -208,14 +218,14 @@ export default function EventDetailsCard({ event }: { event: IEventCreate & { [k
               </div>
               <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {[
-                  { label: "Event Type",       value: event.eventType ?? "—",       icon: <Tag className="w-3.5 h-3.5 text-white/40" /> },
-                  { label: "Start",            value: `${fmt(event.startDate)} ${fmtTime(event.startDate)}`, icon: <Clock className="w-3.5 h-3.5 text-cyan-400" /> },
-                  { label: "End",              value: event.endDate ? `${fmt(event.endDate)} ${fmtTime(event.endDate)}` : "—", icon: <Clock className="w-3.5 h-3.5 text-white/40" /> },
-                  { label: "Location",         value: event.location?.formattedAddress ?? "—", icon: <MapPin className="w-3.5 h-3.5 text-pink-400" /> },
-                  { label: "Joining Fee",      value: event.joiningFee === 0 ? "Free" : `৳${event.joiningFee}`, icon: <DollarSign className="w-3.5 h-3.5 text-emerald-400" /> },
-                  { label: "Max Capacity",     value: event.maxParticipants ?? "Unlimited", icon: <Users className="w-3.5 h-3.5 text-amber-400" /> },
+                  { label: "Event Type", value: event.eventType ?? "—", icon: <Tag className="w-3.5 h-3.5 text-white/40" /> },
+                  { label: "Start", value: `${fmt(event.startDate)} ${fmtTime(event.startDate)}`, icon: <Clock className="w-3.5 h-3.5 text-cyan-400" /> },
+                  { label: "End", value: event.endDate ? `${fmt(event.endDate)} ${fmtTime(event.endDate)}` : "—", icon: <Clock className="w-3.5 h-3.5 text-white/40" /> },
+                  { label: "Location", value: event.location?.formattedAddress ?? "—", icon: <MapPin className="w-3.5 h-3.5 text-pink-400" /> },
+                  { label: "Joining Fee", value: event.joiningFee === 0 ? "Free" : `৳${event.joiningFee}`, icon: <DollarSign className="w-3.5 h-3.5 text-emerald-400" /> },
+                  { label: "Max Capacity", value: event.maxParticipants ?? "Unlimited", icon: <Users className="w-3.5 h-3.5 text-amber-400" /> },
                   { label: "Min Participants", value: event.minParticipants ?? "—", icon: <Users className="w-3.5 h-3.5 text-white/40" /> },
-                  { label: "Status",           value: statusCfg.label,              icon: statusCfg.icon },
+                  { label: "Status", value: statusCfg.label, icon: statusCfg.icon },
                 ].map(({ label, value, icon }) => (
                   <div key={label} className="flex items-start gap-2.5">
                     <div className="mt-0.5 shrink-0">{icon}</div>
@@ -422,19 +432,18 @@ export default function EventDetailsCard({ event }: { event: IEventCreate & { [k
               <button
                 onClick={handleJoin}
                 disabled={loading || isFull}
-                className={`w-full py-3.5 rounded-xl text-sm font-bold transition-all shadow-lg ${
-                  isFull
+                className={`w-full py-3.5 rounded-xl text-sm font-bold transition-all shadow-lg ${isFull
                     ? "bg-white/10 text-white/30 border border-white/10 cursor-not-allowed"
                     : "bg-amber-500 hover:bg-amber-600 active:scale-[0.98] text-white border-2 border-amber-700/50 shadow-amber-500/25"
-                } disabled:opacity-60`}
+                  } disabled:opacity-60`}
               >
                 {loading
                   ? "Processing..."
                   : isFull
-                  ? event.status === "COMPLETED" ? "Event Ended" : event.status === "CANCELLED" ? "Event Cancelled" : "Event Full"
-                  : event.joiningFee && event.joiningFee > 0
-                  ? `PAY ৳${event.joiningFee} & JOIN`
-                  : "JOIN EVENT"}
+                    ? event.status === "COMPLETED" ? "Event Ended" : event.status === "CANCELLED" ? "Event Cancelled" : "Event Full"
+                    : event.joiningFee && event.joiningFee > 0
+                      ? `PAY ৳${event.joiningFee} & JOIN`
+                      : "JOIN EVENT"}
               </button>
             </div>
           </div>

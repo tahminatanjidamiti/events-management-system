@@ -179,7 +179,7 @@ function PaymentSuccessContent() {
                 )}
               </div>
               <button
-                onClick={() => router.push(`/events/${event.id}`)}
+                onClick={() => router.push(`/events/${event.id}?status=success`)}
                 className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold bg-white/8 hover:bg-white/12 text-white border border-white/10 hover:border-white/20 transition-all mt-1"
               >
                 View Event <ArrowRight className="w-4 h-4" />

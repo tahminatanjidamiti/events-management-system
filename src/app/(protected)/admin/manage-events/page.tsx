@@ -21,7 +21,7 @@ const STATUS_CONFIG: Record<string, { label: string; badge: string; icon: ReactN
   COMPLETED: { label: "Completed", badge: "bg-amber-100 text-amber-700 border border-amber-300 dark:bg-amber-500/20 dark:text-amber-300 dark:border-amber-500",    icon: <CheckCircle2 className="w-3 h-3" /> },
   CANCELLED: { label: "Cancelled", badge: "bg-red-100 text-red-600 border border-red-200 dark:bg-red-500/20 dark:text-red-300 dark:border-red-500/30",             icon: <XCircle className="w-3 h-3" /> },
   FULL:      { label: "Full",      badge: "bg-orange-100 text-orange-600 border border-orange-200 dark:bg-orange-500/20 dark:text-orange-300 dark:border-orange-500/30", icon: <AlertCircle className="w-3 h-3" /> },
-  OPEN:      { label: "Open",      badge: "bg-violet-100 text-violet-700 border border-violet-200 dark:bg-violet-500/20 dark:text-violet-300 dark:border-violet-500/30", icon: <CircleDot className="w-3 h-3" /> },
+  OPEN:      { label: "Open",      badge: "bg-green-100 text-green-700 border border-green-200 dark:bg-green-500/20 dark:text-green-300 dark:border-green-500/30", icon: <CircleDot className="w-3 h-3" /> },
 };
 
 const STATUSES = [

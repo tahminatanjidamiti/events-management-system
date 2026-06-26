@@ -4,6 +4,7 @@
 import { submitReview, getSavedEvents } from "@/actions/social";
 import { IReviewPayload } from "@/types";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 type SavedEventOption = {
@@ -19,21 +20,26 @@ export default function ReviewForm() {
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const router = useRouter();
+
+  const fetchSavedEvents = () => {
+    setLoadingEvents(true);
+    getSavedEvents()
+      .then((res) => {
+        const options: SavedEventOption[] = res.data.map((se: any) => ({
+          id: se.event?.id ?? se.eventId,
+          title: se.event?.title ?? "Untitled Event",
+        }));
+        setSavedEventOptions(options);
+      })
+      .catch(() => toast.error("Failed to load your saved events"))
+      .finally(() => setLoadingEvents(false));
+  };
 
   useEffect(() => {
-  getSavedEvents()
-    .then((res) => {
-      // ✅ res.data is now always the array
-      const options: SavedEventOption[] = res.data.map((se: any) => ({
-        id: se.event?.id ?? se.eventId,
-        title: se.event?.title ?? "Untitled Event",
-      }));
-      setSavedEventOptions(options);
-    })
-    .catch(() => toast.error("Failed to load your saved events"))
-    .finally(() => setLoadingEvents(false));
-}, []);
-
+    fetchSavedEvents();
+  }, []);
+  
   const submit = async () => {
     if (!eventId) return toast.error("Please select an event");
     if (rating < 1 || rating > 5) return toast.error("Rating must be between 1 and 5");
@@ -51,6 +57,8 @@ export default function ReviewForm() {
       setEventId("");
       setRating(5);
       setComment("");
+      router.refresh();       // refreshes page-level server data
+      fetchSavedEvents();
     } catch (err: any) {
       toast.error(err.message || "Failed to submit review");
     } finally {
